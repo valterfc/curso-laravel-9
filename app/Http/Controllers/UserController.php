@@ -26,6 +26,16 @@ class UserController extends Controller
 
     public function show($id)
     {
-        dd('UserController@show', $id); //dd - debuga e mata a aplicação
+        //dd('UserController@show', $id); //dd - debuga e mata a aplicação
+
+        //$user = User::where('id', '=', $id)->first(); // passando '='
+        //$user = User::where('id', $id)->first();
+        if (!$user = User::find($id)) {
+            //return redirect()->back();
+            return redirect()->route('users.index');
+        }
+
+        //dd($user);
+        return view('users.show', compact('user'));
     }
 }

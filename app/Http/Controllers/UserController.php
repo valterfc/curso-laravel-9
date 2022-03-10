@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -10,7 +11,17 @@ class UserController extends Controller
     {
         //dd('UserController@index'); //dd - debuga e mata a aplicação
         //return view('users/index'); // igual a linha de baixo
-        return view('users.index');
+        $users = User::get();
+        //dd($users);
+
+        //return view('users/index'); // igual a linha de baixo
+        //return view('users.index');
+
+        //return view('users.index', [
+        //    'users' => $users
+        //]);
+
+        return view('users.index', compact('users'));
     }
 
     public function show($id)

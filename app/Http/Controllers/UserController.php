@@ -8,22 +8,26 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    protected $model;
+
+    public function __construct(User $user)
+    {
+        $this->model = $user;
+    }
+
     public function index(Request $request)
     {
-        $search = $request->search;
-        $users = User::where(function ($query) use ($search) {
-            if ($search) {
-                $query->where('email', '=', $search);
-                $query->orWhere('name', 'LIKE', "%{$search}%");
-            }
-        })->get();
-        //$users = User::where('name', 'LIKE', "%{$request->search}%")->get();
-        //$users = User::where('name', 'LIKE', "%{$request->search}%")->toSql();
+        $users = $this->model
+                ->getUsers(
+                    $search = $request->search ?? ''
+                );
+        //$users = $this->model->where('name', 'LIKE', "%{$request->search}%")->get();
+        //$users = $this->model->where('name', 'LIKE', "%{$request->search}%")->toSql();
         //dd($users);
 
         //dd('UserController@index'); //dd - debuga e mata a aplicação
         //return view('users/index'); // igual a linha de baixo
-        //$users = User::get();
+        //$users = $this->model->get();
         //dd($users);
 
         //return view('users/index'); // igual a linha de baixo
@@ -40,9 +44,9 @@ class UserController extends Controller
     {
         //dd('UserController@show', $id); //dd - debuga e mata a aplicação
 
-        //$user = User::where('id', '=', $id)->first(); // passando '='
-        //$user = User::where('id', $id)->first();
-        if (!$user = User::find($id)) {
+        //$user = $this->model->where('id', '=', $id)->first(); // passando '='
+        //$user = $this->model->where('id', $id)->first();
+        if (!$user = $this->model->find($id)) {
             //return redirect()->back();
             return redirect()->route('users.index');
         }
@@ -61,8 +65,8 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = bcrypt($data['password']);
 
-        // $user = User::create($data);
-        User::create($data);
+        // $user = $this->model->create($data);
+        $this->model->create($data);
 
         return redirect()->route('users.index');
         // return redirect()->route('users.show', $user->id);
@@ -76,7 +80,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        if (!$user = User::find($id)) {
+        if (!$user = $this->model->find($id)) {
             return redirect()->route('users.index');
         }
 
@@ -85,7 +89,7 @@ class UserController extends Controller
 
     public function update(StoreUpdateUserFormRequest $request, $id)
     {
-        if (!$user = User::find($id)) {
+        if (!$user = $this->model->find($id)) {
             return redirect()->route('users.index');
         }
 
@@ -102,7 +106,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        if (!$user = User::find($id)) {
+        if (!$user = $this->model->find($id)) {
             return redirect()->route('users.index');
         }
 

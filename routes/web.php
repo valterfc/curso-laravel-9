@@ -5,7 +5,9 @@ use App\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Route;
 
-//Route::patch // utilizado para edição parcial
+// "delete" também pode ser "destroy"
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+// Route::patch // utilizado para edição parcial
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::get('/users', [UserController::class, 'index'])->name('users.index');

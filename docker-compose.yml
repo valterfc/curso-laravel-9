@@ -65,6 +65,7 @@ services:
     redis:
         container_name: especializati-redis
         image: redis:latest
+        restart: unless-stopped
         networks: 
             - laravel-9
 

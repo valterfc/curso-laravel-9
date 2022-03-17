@@ -50,7 +50,8 @@ class User extends Authenticatable
             }
         })
         ->with('comments') // incluí os "comments" na mesma chamada, economizando no carregamento posterior
-        ->get();
+        ->paginate(); // pagina automaticamente (default = 15)
+        //->get(); // método padrão
 
         return $users;
     }
